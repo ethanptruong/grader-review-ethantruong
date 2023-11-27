@@ -9,8 +9,30 @@ git clone $1 student-submission
 echo 'Finished cloning'
 
 
-# Draw a picture/take notes on the directory structure that's set up after
-# getting to this point
+if [ ! -f student-submission/ListExamples.java ]; then
+    echo "Error: ListExamples.java not found in the submission."
+    exit 1
+fi
 
-# Then, add here code to compile and run, and do any post-processing of the
-# tests
+
+cp TestListExamples.java student-submission/
+cp -r lib student-submission/
+
+
+cd student-submission
+
+
+javac -cp $CPATH ListExamples.java TestListExamples.java
+if [ $? -ne 0 ]; then
+    echo "Error: Compilation failed."
+    exit 1
+fi
+
+java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > test_results.txt
+if [ $? -ne 0 ]; then
+    echo "Error: Tests failed to run."
+    exit 1
+fi
+
+
+echo "tests passed."
