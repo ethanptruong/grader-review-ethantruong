@@ -30,4 +30,7 @@ if ! [[ $? -eq 0 ]]
         exit 2
 fi
 java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > output.txt
-grep "There was" "output.txt"
+total=`head -2 output.txt | tail -1 | grep -o "." | wc -l`
+fails=`head -2 output.txt | tail -1 | grep -o "E" | wc -l`
+successes=$(($total-$fails))
+echo "Tests Passed: $successes, Total Tests: $total"
